@@ -16,21 +16,21 @@ from models.conservante import Conservante
 from typing import List, Optional
 
 picoles_ingredientes = sa.Table(
-    'Ingredientes_Picoles',
+    'ingredientes_picoles',
     ModelBase.metadata,
     sa.Column('id_ingrediente', sa.Integer, sa.ForeignKey('ingredientes.id')),
     sa.Column('id_picole', sa.Integer, sa.ForeignKey('picoles.id'))
 )
 
 picoles_aditivos_nutritivos = sa.Table(
-    'Picoles_Aditivos_Nutritivos',
+    'picoles_aditivos_nutritivos',
     ModelBase.metadata,
     sa.Column('id_aditivo_nutritivo', sa.Integer, sa.ForeignKey('aditivos_nutritivos.id')),
     sa.Column('id_picole',sa.Integer, sa.ForeignKey('picoles.id'))
 )
 
 picoles_conservantes = sa.Table(
-    'Picoles_Conservantes',
+    'picoles_conservantes',
     ModelBase.metadata,
     sa.Column('id_conservante', sa.Integer, sa.ForeignKey('conservantes.id')),
     sa.Column('id_picole', sa.Integer, sa.ForeignKey('picoles.id'))

@@ -28,7 +28,7 @@ def create_engine(sqlite: bool = False) -> Engine:
         __engine = sa.create_engine(url=conn_str, echo=False, connect_args={"check_same_thread": False})
     else:
         conn_str = "postgresql://postgres:123456@localhost:5432/postgres"
-        __engine = sa.create_engine(url=conn_str, echo=False)
+        __engine = sa.create_engine(url=conn_str, echo=True)
 
     return __engine
 

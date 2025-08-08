@@ -87,7 +87,7 @@ def select_filter_revendedor(id_revendedor: int) -> None:
 
 if __name__ == "__main__":
     
-    select_todos_aditivos_nutritivos()
+    # select_todos_aditivos_nutritivos()
 
     # select_com_filter_todos_sabores(1)
 
@@ -97,6 +97,6 @@ if __name__ == "__main__":
 
     # select_picole_sabor()
 
-    # conta_tipo_embalagem()
+    conta_tipo_embalagem()
 
     # func_picoles()

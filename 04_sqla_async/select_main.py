@@ -51,30 +51,38 @@ async def select_complexo_picole_order_by() -> None:
 async def select_picole_sabor() -> None:
     async with create_session() as session:
         result = await session.execute(select(Picole).group_by(Picole.id, Picole.id_tipo_picole))
-        picoles: Picole = result.unique().all()
+        picoles: List[Picole] = result.scalars().unique().all()
         for picole in picoles:
             print_objeto(picole, True, True)  # prints both Picole and its Sabor
 
 async def conta_tipo_embalagem() -> None:
     async with create_session() as session:
-        conta_tipo_embalagem: int = session.query(TipoEmbalagem).count()
-
-        print(conta_tipo_embalagem)
+        conta_tipo_embalagem = await session.execute(select(TipoEmbalagem))
+        result = len(conta_tipo_embalagem.all()) 
+        
+        print(result)
 
 async def func_picoles() -> None:
     async with create_session() as session:
-        resultado: List = session.query(
+        resultado: List = await session.execute(select(
             func.sum(Picole.preco).label("Soma"),
             func.min(Picole.preco).label("Minimo"),
             func.max(Picole.preco).label("Maximo"),
             func.avg(Picole.preco).label("Media")
-        ).all()
-        print(f"Soma: {resultado[0][0]}\nMinimo: {resultado[0][1]}\nMaximo: {resultado[0][2]}\nMédia: {resultado[0][3]}")
+        ))
+        soma, minimo, maximo, media = resultado.one()
+        
+        print(f"Soma: {soma}")
+        print(f"Mínimo: {minimo}")
+        print(f"Máximo: {maximo}")
+        print(f"Média: {media}")
+
 
 async def select_filter_picole(id_picole: int) -> None:
     async with create_session() as session:
 
-        picole: Picole = session.query(Picole).filter(Picole.id == id_picole).one_or_none()
+        result = session.execute(select(Picole).filter(Picole.id == id_picole))
+        picole: Picole = result.scalars().one_or_none()
 
         if picole:
             print_objeto(picole)
@@ -84,8 +92,8 @@ async def select_filter_picole(id_picole: int) -> None:
 async def select_filter_revendedor(id_revendedor: int) -> None:
     async with create_session() as session:
 
-        result = session.execute(select(Revendedor).filter(Revendedor.id == id_revendedor))
-        revendedor: Revendedor = result.one_or_none()
+        result = await session.execute(select(Revendedor).filter(Revendedor.id == id_revendedor))
+        revendedor: Revendedor = result.scalars().one_or_none()
 
         if revendedor:
             print_objeto(revendedor)
@@ -98,18 +106,14 @@ if __name__ == "__main__":
 
     # asyncio.run(select_com_filter_todos_sabores(1))
 
-    # asyncio.run(select_complexo_picole())
+    asyncio.run(select_complexo_picole())
 
     # asyncio.run(select_complexo_picole_order_by())
 
-    asyncio.run(select_picole_sabor())
+    # asyncio.run(select_picole_sabor())
 
-    # conta_tipo_embalagem()
+    # asyncio.run(conta_tipo_embalagem())
 
-    # func_picoles()
+    # asyncio.run(func_picoles())
 
-    """
-    
-
-    
-    """
+    # asyncio.run(select_filter_revendedor(1))

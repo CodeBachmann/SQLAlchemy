@@ -50,7 +50,8 @@ async def select_complexo_picole_order_by() -> None:
 
 async def select_picole_sabor() -> None:
     async with create_session() as session:
-        picoles = session.query(Picole).group_by(Picole.id, Picole.id_tipo_picole).all()
+        result = await session.execute(select(Picole).group_by(Picole.id, Picole.id_tipo_picole))
+        picoles: Picole = result.unique().all()
         for picole in picoles:
             print_objeto(picole, True, True)  # prints both Picole and its Sabor
 
@@ -83,7 +84,8 @@ async def select_filter_picole(id_picole: int) -> None:
 async def select_filter_revendedor(id_revendedor: int) -> None:
     async with create_session() as session:
 
-        revendedor: Revendedor = session.query(Revendedor).filter(Revendedor.id == id_revendedor).one_or_none()
+        result = session.execute(select(Revendedor).filter(Revendedor.id == id_revendedor))
+        revendedor: Revendedor = result.one_or_none()
 
         if revendedor:
             print_objeto(revendedor)
@@ -98,10 +100,16 @@ if __name__ == "__main__":
 
     # asyncio.run(select_complexo_picole())
 
-    asyncio.run(select_complexo_picole_order_by())
+    # asyncio.run(select_complexo_picole_order_by())
 
-    # select_picole_sabor()
+    asyncio.run(select_picole_sabor())
 
     # conta_tipo_embalagem()
 
     # func_picoles()
+
+    """
+    
+
+    
+    """
